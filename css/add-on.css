@@ -1,0 +1,32 @@
+/*
+  This css file is for individual users to restyle items for their personal site,
+  or for the implementation of features specifically for their site. Anything that
+  is an official part of the theme (ex. Pull Requests) should be included in main.css
+  and follow the formatting and style given.
+*/
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+a {
+  background-color: transparent;
+}
+
+small {
+  font-size: 200%;
+}
+
+p {
+  font-size : 20px;
+  line-height: 40px;　
+}
+
+time {
+  line-height: 48px;　
+}
+
+.title p {
+  font-size : 14px;
+  line-height: 28px;　
+}
