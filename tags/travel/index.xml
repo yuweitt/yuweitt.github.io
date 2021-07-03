@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>travel on 厭世陣線1997</title>
-    <link>https://yuweitt.github.io/tags/travel/</link>
+    <link>http://example.org/tags/travel/</link>
     <description>Recent content in travel on 厭世陣線1997</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 02 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://yuweitt.github.io/tags/travel/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 02 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://example.org/tags/travel/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>哈爾濱驚魂記</title>
-      <link>https://yuweitt.github.io/blog/strange/</link>
+      <link>http://example.org/blog/strange/</link>
       <pubDate>Fri, 02 Jul 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://yuweitt.github.io/blog/strange/</guid>
+      <guid>http://example.org/blog/strange/</guid>
       <description>&lt;h1 id=&#34;越想越不對勁&#34;&gt;越想越不對勁&lt;/h1&gt;
 &lt;h2 id=&#34;intro&#34;&gt;Intro&lt;/h2&gt;
 &lt;blockquote&gt;
@@ -22,10 +22,10 @@
     
     <item>
       <title>哈爾濱 (一)</title>
-      <link>https://yuweitt.github.io/blog/harbin_1/</link>
+      <link>http://example.org/blog/harbin_1/</link>
       <pubDate>Fri, 05 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://yuweitt.github.io/blog/harbin_1/</guid>
+      <guid>http://example.org/blog/harbin_1/</guid>
       <description>&lt;p&gt;2018，哈爾濱的六個星期&lt;/p&gt;</description>
     </item>
     

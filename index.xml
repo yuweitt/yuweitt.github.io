@@ -2,17 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>厭世陣線1997</title>
-    <link>https://yuweitt.github.io/</link>
+    <link>http://example.org/</link>
     <description>Recent content on 厭世陣線1997</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 02 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://yuweitt.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 03 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>攝影。初</title>
+      <link>http://example.org/blog/conver/</link>
+      <pubDate>Sat, 03 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/blog/conver/</guid>
+      <description>&lt;p&gt;如果說哪件事情，深深改變了我的生活，那毫無疑問的，就是攝影&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>哈爾濱驚魂記</title>
-      <link>https://yuweitt.github.io/blog/strange/</link>
+      <link>http://example.org/blog/strange/</link>
       <pubDate>Fri, 02 Jul 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://yuweitt.github.io/blog/strange/</guid>
+      <guid>http://example.org/blog/strange/</guid>
       <description>&lt;h1 id=&#34;越想越不對勁&#34;&gt;越想越不對勁&lt;/h1&gt;
 &lt;h2 id=&#34;intro&#34;&gt;Intro&lt;/h2&gt;
 &lt;blockquote&gt;
@@ -21,38 +30,30 @@
     </item>
     
     <item>
-      <title>Rich Content</title>
-      <link>https://yuweitt.github.io/blog/rich-content/</link>
-      <pubDate>Sun, 10 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://yuweitt.github.io/blog/rich-content/</guid>
-      <description>&lt;p&gt;Hugo ships with several &lt;a href=&#34;https://gohugo.io/content-management/shortcodes/#use-hugo-s-built-in-shortcodes&#34;&gt;Built-in Shortcodes&lt;/a&gt; for rich content, along with a &lt;a href=&#34;https://gohugo.io/about/hugo-and-gdpr/&#34;&gt;Privacy Config&lt;/a&gt; and a set of Simple Shortcodes that enable static and no-JS versions of various social media embeds.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
       <title>About</title>
-      <link>https://yuweitt.github.io/about/</link>
+      <link>http://example.org/about/</link>
       <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://yuweitt.github.io/about/</guid>
-      <description>Yuwei_tt 今年要邁向 24 歲。 桃園人，在新竹待了四年，研一，邁向台北的第二年 喜歡在街頭到處走，一台相機，一張地圖，就是一整天 鍵盤敲久了，就忘了手寫的自然 忘了從前，用雙手刻下的回憶，字字珠璣 看著牆上的時鐘，滴答滴答的過去，害怕自己留不下什麼 害怕曾經的深刻，都只是隨著身體的細胞，慢慢死去 有太多特別，有趣，如果不好好記錄下來，那也，太對不起自己  #Kpop : TWICE、IU、DAY6 #Badminton : 因為一場偶然，讓羽球和系隊豐富了大學四年 #Photogrrapth : 一腳踏入攝影的陷阱了，開闊了另一隻眼 #ComputerScience : CS   </description>
+      <guid>http://example.org/about/</guid>
+      <description>&lt;h1 id=&#34;yuwei_tt&#34;&gt;&lt;em&gt;Yuwei_tt&lt;/em&gt;&lt;/h1&gt;
+&lt;p&gt;About Me&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>哈爾濱 (一)</title>
-      <link>https://yuweitt.github.io/blog/harbin_1/</link>
+      <link>http://example.org/blog/harbin_1/</link>
       <pubDate>Fri, 05 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://yuweitt.github.io/blog/harbin_1/</guid>
+      <guid>http://example.org/blog/harbin_1/</guid>
       <description>&lt;p&gt;2018，哈爾濱的六個星期&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Contact</title>
-      <link>https://yuweitt.github.io/contact/</link>
+      <link>http://example.org/contact/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://yuweitt.github.io/contact/</guid>
+      <guid>http://example.org/contact/</guid>
       <description></description>
     </item>
     
