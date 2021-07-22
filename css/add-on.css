@@ -34,3 +34,16 @@ time {
 #home-icon {
   margin-left: 10px;
 }
+
+img[alt=exhit] {
+  display: block;
+  margin: 0.7rem auto;
+  width: 70%;
+}
+
+img[alt=image] {
+  display: block;
+  margin: 0.7rem auto;
+  width: 70%;
+}
+
