@@ -6,26 +6,13 @@
     <description>Recent content in Blog on 厭世陣線1997</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 24 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://yuweitt.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 08 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yuweitt.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>初入攝影</title>
-      <link>https://yuweitt.github.io/blog/photo_intro/</link>
-      <pubDate>Sat, 24 Jul 2021 00:00:00 +0000</pubDate>
+      <title>LLVM 雜記</title>
+      <link>https://yuweitt.github.io/blog/llvm/</link>
+      <pubDate>Sun, 08 May 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://yuweitt.github.io/blog/photo_intro/</guid>
-      <description>&lt;h2 id=&#34;攝影入門&#34;&gt;攝影入門&lt;/h2&gt;
-&lt;p&gt;前幾天，Tonie 大師突然問我說：&lt;br&gt;
-「&lt;br&gt;
-TT，攝影入門有沒有推薦的書啊?&lt;br&gt;
-」&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>一把青</title>
-      <link>https://yuweitt.github.io/blog/touchofgreen/</link>
-      <pubDate>Thu, 22 Jul 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://yuweitt.github.io/blog/touchofgreen/</guid>
+      <guid>https://yuweitt.github.io/blog/llvm/</guid>
       <description>&lt;!-- # 一把青 --&gt;</description>
     </item>
     

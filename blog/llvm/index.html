@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+<title>LLVM 雜記 - 厭世陣線1997</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png?v=1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png?v=1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png?v=1">
+  <link rel="manifest" href="/favicon/site.webmanifest?v=1">
+  
+    <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg?v=1" color="#ffffff">
+    <link rel="shortcut icon" href="/favicon/favicon.ico?v=1">
+    <meta name="msapplication-config" content="/favicon/browserconfig.xml?v=1">
+  
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+
+<meta name="generator" content="Hugo 0.97.3" /><meta property="og:site_name" content="厭世陣線1997">
+  <meta property="og:title" content="LLVM 雜記">
+  <meta property="og:description" content="一些有關 LLVM 的小小筆記">
+  <meta property="description" content="一些有關 LLVM 的小小筆記">
+  <meta property="og:url" content="https://yuweitt.github.io/blog/llvm/">
+  <meta property="og:type" content="article">
+  
+    
+      <meta property="og:image" content="https://yuweitt.github.io/img/Marvell/night.jpg">
+      <meta property="og:image:alt" content="">
+    
+  
+  <link rel="stylesheet" href="/css/bundle.min.5233f2a4cd515395301b4154f6c1c621695e8cf53faa0935b76ac52fed7f4585.css" integrity="sha256-UjPypM1RU5UwG0FU9sHGIWlejPU/qgk1t2rFL&#43;1/RYU="><link rel="stylesheet" href="/css/add-on.css">
+</head>
+
+  <head>
+    
+      
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J10FYDQ9V0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-J10FYDQ9V0');
+</script>
+    
+  </head>
+  <body>
+    
+
+<header id="site-header">
+  <nav id="site-nav">
+    <h1 class="nav-title">
+      
+      <img id="home-icon" src="https://yuweitt.github.io/favicon/favicon.ico?v=1" alt="ICONIC">
+      <a href="/" class="nav">
+        
+          Yuwei TT
+        
+      </a>
+    </h1>
+    <menu id="site-nav-menu" class="flyout-menu menu">
+      
+        
+          
+          <a href="/" class="nav link"><i class='fa fa-home'></i> Home</a>
+        
+      
+        
+          
+          <a href="/about" class="nav link"><i class='far fa-id-card'></i> About</a>
+        
+      
+        
+          
+          <a href="/categories" class="nav link"><i class='fas fa-sitemap'></i> Categories</a>
+        
+      
+      <a href="#share-menu" class="nav link share-toggle"><i class="fas fa-share-alt">&nbsp;</i>Share</a>
+      <a href="#search-input" class="nav link search-toggle"><i class="fas fa-search">&nbsp;</i>Search</a>
+    </menu>
+    <a href="#search-input" class="nav search-toggle"><i class="fas fa-search fa-2x">&nbsp;</i></a>
+    <a href="#share-menu" class="nav share-toggle"><i class="fas fa-share-alt fa-2x">&nbsp;</i></a>
+    
+    <a href="#site-nav" class="nav nav-toggle"><i class="fas fa-bars fa-2x"></i></a>
+  </nav>
+  <menu id="search" class="menu"><input id="search-input" class="search-input menu"></input><div id="search-results" class="search-results menu"></div></menu>
+  
+  
+    <menu id="share-menu" class="flyout-menu menu">
+      <h1>Share Post</h1>
+      
+
+
+
+
+  
+    
+    <a href="//twitter.com/share?text=LLVM%20%e9%9b%9c%e8%a8%98&amp;url=https%3a%2f%2fyuweitt.github.io%2fblog%2fllvm%2f" target="_blank" rel="noopener" class="nav share-btn twitter">
+        <p>Twitter</p>
+      </a>
+  
+
+  
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyuweitt.github.io%2fblog%2fllvm%2f" target="_blank" rel="noopener" class="nav share-btn facebook">
+        <p>Facebook</p>
+        </a>
+  
+
+  
+        <a href="mailto:?subject=Check%20out%20this%20post%20by Yuwei_tt&amp;body=https%3a%2f%2fyuweitt.github.io%2fblog%2fllvm%2f" target="_blank" class="nav share-btn email" data-proofer-ignore>
+          <p>Email</p>
+        </a>
+  
+
+
+    </menu>
+  
+</header>
+
+    <div id="wrapper">
+      <section id="site-intro" >
+  <a href="/"><img src="https://yuweitt.github.io/img/main/head.jpg" class="circle" width="100" alt="Yuwei_tt" /></a>
+  <header>
+    <h1>Yuwei_tt Blog</h1>
+  </header>
+  <main>
+    <p>COMPUTER SCIENCE X PHOTOGRAPHY <br> BADMINTON LIFE <br> EXPLORATION <br> 努力探索這個世界<br></p>
+  </main>
+  
+    <footer>
+      <ul class="socnet-icons">
+        
+
+        <li><a href="//github.com/yuweitt" target="_blank" rel="noopener" title="GitHub" class="fab fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//facebook.com/zhu.y.wei/" target="_blank" rel="noopener" title="Facebook" class="fab fa-facebook"></a></li>
+
+
+
+
+
+
+
+
+<li><a href="//instagram.com/yuwei_tt_photo" target="_blank" rel="noopener" title="Instagram" class="fab fa-instagram"></a></li>
+
+<li><a href="//twitter.com/yuwei_tt" target="_blank" rel="noopener" title="Twitter" class="fab fa-twitter"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="mailto:unimaybe4@gmail.com" target="_blank" title="Email" class="far fa-envelope"></a></li>
+
+      </ul>
+    </footer>
+  
+</section>
+
+      <main id="site-main">
+        
+  <article>
+    <div class="post">
+      <header>
+  <div class="title">
+    
+      <h2><a href="/blog/llvm/">LLVM 雜記</a></h2>
+    
+    
+      <p>一些有關 LLVM 的小小筆記</p>
+    
+  </div>
+  <div class="meta">
+    <time datetime="2022-05-08 00:00:00 &#43;0000 UTC">May 8, 2022</time>
+    <p>Yuwei_tt</p>
+    <p>11-Minute Read</p>
+  </div>
+</header>
+
+      <div id="socnet-share">
+        
+
+
+
+
+  
+    
+    <a href="//twitter.com/share?text=LLVM%20%e9%9b%9c%e8%a8%98&amp;url=https%3a%2f%2fyuweitt.github.io%2fblog%2fllvm%2f" target="_blank" rel="noopener" class="nav share-btn twitter">
+        <p>Twitter</p>
+      </a>
+  
+
+  
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyuweitt.github.io%2fblog%2fllvm%2f" target="_blank" rel="noopener" class="nav share-btn facebook">
+        <p>Facebook</p>
+        </a>
+  
+
+  
+        <a href="mailto:?subject=Check%20out%20this%20post%20by Yuwei_tt&amp;body=https%3a%2f%2fyuweitt.github.io%2fblog%2fllvm%2f" target="_blank" class="nav share-btn email" data-proofer-ignore>
+          <p>Email</p>
+        </a>
+  
+
+
+      </div>
+      <div class="content">
+        <a href="/blog/llvm/" class="image" style="--bg-image: url('https://yuweitt.github.io/img/Marvell/night.jpg');">
+    <img class="" src="https://yuweitt.github.io/img/Marvell/night.jpg" alt="">
+  </a>
+        <!-- # 一把青 -->
+<h2 id="簡介">簡介</h2>
+<p>算是在研究 LLVM 時，一邊學習一邊踩坑的小筆記，所以有點雜亂，之後有機會再好好整理。學習過程主要是希望可以用 Clang 編譯 CUDA code，並且利用 LLVM IR 對 Host side 的 Code 做一些變化。最一開始從網路上的一個 LLVM Project 開始 Trace Code，並且一邊修改一邊嘗試。</p>
+<h2 id="imageimgmarvellnightjpg"><img src="/img/Marvell/night.jpg" alt="image"></h2>
+<h1 id="llvm-cuda-opentuner">LLVM CUDA OPENTUNER</h1>
+<h6 id="tags-cs">tags: <code>CS</code></h6>
+<h1 id="relevent-link">Relevent Link</h1>
+<p><a href="https://github.com/apc-llc/nvcc-llvm-ir">nvcc-llvm-ir</a><br>
+<a href="https://github.com/sderek/CUDAAdvisor">CUDAAdvisor</a><br>
+<a href="https://gist.github.com/ax3l/9489132">Different Version Compatibility</a><br>
+<a href="https://github.com/lineagech/DynaMap/blob/master/DynaMap-LLVM/mem_acc_inst.cpp">DynaMap</a><br>
+<a href="https://github.com/upenn-acg/gpuDranoDynamicAnalysis">GpuDrano Dynamic Analysis</a><br>
+<a href="https://github.com/upenn-acg/gpudrano-static-analysis_v1.0">GPU Drano Static Analysis</a><br>
+<a href="https://github.com/apc-llc/nvcc-llvm-ir">Enabling on-the-fly manipulations with LLVM IR code of CUDA sources</a><br>
+<a href="https://llvm.org/devmtg/2019-04/slides/Tutorial-Bridgers-LLVM_IR_tutorial.pdf">LLVM Pass Slide</a> (這個好像很讚)<br>
+<a href="https://www.cl.cam.ac.uk/teaching/1516/L25/3LLVMIRandTransformPipeline.pdf">Good Intro to LLVM IR Pass</a><br>
+<a href="https://zhuanlan.zhihu.com/p/122522485">一些之乎大神</a><br>
+<a href="https://zhuanlan.zhihu.com/p/409154399">這個在講怎麼編譯</a><br>
+<a href="https://zhuanlan.zhihu.com/p/409154399">在講 NVVM 讚</a><br>
+<a href="https://kheresy.wordpress.com/2007/11/05/nvidia-cuda-api%EF%BC%88%E4%B8%8A%EF%BC%89/">這邊講了一下 CUDA 的一些限制，還不錯</a><br>
+<a href="https://llvm.org/docs/Lexicon.html">LLVM字典</a></p>
+<ul>
+<li>RAUW
+Replace All Uses With.
+Implement the replacement of one Value with another by iterating over its def/use chain and fixing up all of the pointers to point to the new value.</li>
+</ul>
+<h1 id="llvm-install">LLVM Install</h1>
+<h2 id="build-from-source">Build from source</h2>
+<ul>
+<li>Clone and version specified
+<code>git clone https://github.com/llvm/llvm-project.git -b llvmorg-10.0.0</code></li>
+<li>Follow <a href="https://llvm.org/docs/CMake.html#quick-start">Clang/LLVM</a></li>
+<li>Build clang and llvm cmake command
+<code>cmake -DCMAKE_INSTALL_PREFIX=/usr/bin -DCMAKE_BUILD_TYPE=Release -D_GLIBCXX_USE_CXX11_ABI=0 -DLLVM_ENABLE_PROJECTS=clang -G &quot;Unix Makefiles&quot; ../llvm </code></li>
+<li>Link with full path
+<code>sudo ln -sf ~/llvm-project/build/bin/* /usr/bin/</code></li>
+</ul>
+<pre tabindex="0"><code>Error while compilng LLVM
+$ -- Performing Test HAVE_GNU_POSIX_REGEX -- failed to compile
+</code></pre><p>好像沒差???</p>
+<hr>
+<h1 id="llvm-ir-to-executable">LLVM IR to executable</h1>
+<p><img src="https://i.imgur.com/xDjQcwJ.png" alt="">
+<a href="https://stackoverflow.com/questions/58793188/link-ll-files-generated-by-compiling-cu-file-with-clang">感覺還滿詳細的教學</a>
+CUDA 學習系列<a href="https://polobymulberry.github.io/2019/03/04/CUDA%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97(1)%20%7C%20%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E7%AF%87/">網址</a>
+<a href="https://github.com/sderek/CUDAAdvisor/blob/master/src/Makefile">Makefile</a></p>
+<p><code>ssh -L 5906:127.0.0.1:5906 -N -l yuweitt 140.112.42.182 -p 607</code></p>
+<h2 id="compilation-breakdown">Compilation breakdown</h2>
+<p>這邊基本上就是利用 verbose 的 Flag，把整個 Flow 都印出來。但是有一個問題，就是我找不到 <strong>cicc</strong>，在 CUDA 的官方文件中，這個基本上是要用來完成 <strong>device code to ptx</strong> 的部分。
+問題是在 cuda 的 binary 裡面並沒有看到這個 executable，所以也沒有辦法編譯。不過其實好像也不用用到 cicc，反正他只是要把 fatbinary 編出來，用 <code>$fatbinary</code> 就可以把他編出來了。</p>
+<pre tabindex="0"><code class="language-bash=" data-lang="bash=">➜  vectorAdd nvcc -dryrun --include-path=&#34;../../common/inc&#34; vectorAdd.cu
+$ gcc &#34;vectorAdd.cu&#34; &gt; &#34;8_vectorAdd.cpp1.ii&#34;
+$ cicc -arch compute_30 --include_file_name &#34;2_vectorAdd.fatbin.c&#34; --orig_src_file_name &#34;vectorAdd.cu&#34; --gen_c_file_name &#34;5_vectorAdd.cudafe1.c&#34; --stub_file_name &#34;5_vectorAdd.cudafe1.stub.c&#34; &#34;8_vectorAdd.cpp1.ii&#34; -o &#34;5_vectorAdd.ptx&#34;
+$ ptxas -arch=sm_30 &#34;5_vectorAdd.ptx&#34; -o &#34;9_vectorAdd.sm_30.cubin&#34;
+$ fatbinary --create=&#34;2_vectorAdd.fatbin&#34; &#34;--image=profile=sm_30,file=9_vectorAdd.sm_30.cubin&#34; &#34;--image=profile=compute_30,file=5_vectorAdd.ptx&#34; --embedded-fatbin=&#34;2_vectorAdd.fatbin.c&#34;
+$ gcc &#34;vectorAdd.cu&#34; &gt; &#34;4_vectorAdd.cpp4.ii&#34;
+$ cudafe++ --gen_c_file_name &#34;5_vectorAdd.cudafe1.cpp&#34; --stub_file_name &#34;5_vectorAdd.cudafe1.stub.c&#34; &#34;4_vectorAdd.cpp4.ii&#34;
+$ gcc -o &#34;10_vectorAdd.o&#34; &#34;5_vectorAdd.cudafe1.cpp&#34;
+$ nvlink --register-link-binaries=&#34;6_a_dlink.reg.c&#34; &#34;10_vectorAdd.o&#34; -o &#34;11_a_dlink.sm_30.cubin&#34;
+$ fatbinary --create=&#34;7_a_dlink.fatbin&#34; -link &#34;--image=profile=sm_30,file=11_a_dlink.sm_30.cubin&#34; --embedded-fatbin=&#34;7_a_dlink.fatbin.c&#34;
+$ gcc -DFATBINFILE=&#34;\&#34;7_a_dlink.fatbin.c\&#34;&#34; DREGISTERLINKBINARYFILE=&#34;\&#34;6_a_dlink.reg.c\&#34;&#34; -o &#34;12_a_dlink.o&#34; &#34;/usr/local/cuda/bin/crt/link.stub&#34;
+$ g++ -o &#34;a.out&#34; --start-group &#34;12_a_dlink.o&#34; &#34;10_vectorAdd.o&#34;
+</code></pre><h2 id="compilation-command-from-clang-verbose-linkhttpsgithubcomyuweittcudamempassblobmainverboselog">Compilation command from clang verbose <a href="https://github.com/yuweitt/CUDAMemPass/blob/main/verbose.log">Link</a></h2>
+<p>單純利用 <code>clang++ um.cu -o um --cuda-gpu-arch=sm_61 -L /usr/local/cuda/lib64/ -lcudart_static -ldl -lrt -pthread</code> 編譯的時候，如果下 <code>-v</code> 的 verbose Command 可以看到他實際跑了哪些指令。在原本的指令中，沒有儲存 Intermediate，直接生成 object file，但是只要把原本的 <code>-emib-obj</code> 改成 <code>-emit-llvm-bc</code>，就可以了。然後 bc 一樣可以直接跑 LLVM 的 pass，最後可以編譯成功。</p>
+<p>跑 pass 的指令
+<code>opt -S -load /home/yuweitt/llvm-project/build/lib/CUDAMemPass.so -cudamem host.ll -o hosti.ll</code></p>
+<h2 id="makefile-from-cudaadvisor-linkhttpsgithubcomsderekcudaadvisorblobmastersrcmakefile">Makefile from CUDAAdvisor <a href="https://github.com/sderek/CUDAAdvisor/blob/master/src/Makefile">Link</a></h2>
+<p>從 CUDAAdvisor 找到他們的 Makefile，我改成我需要的形狀，但是目前也還不能編譯。</p>
+<p>CUDAAdvisor 這邊走的是一個 clang++ cc1 風格，解釋大概長這樣</p>
+<p>The Clang compiler front-end has several additional Clang specific features which are not exposed through the GCC compatibility driver interface. The <strong>-cc1</strong> argument indicates that the compiler <strong>front-end is to be used, and not the driver.</strong> The clang -cc1 functionality implements the core compiler functionality.</p>
+<p>他下了很多不同的 flag，這部分跟 clang++ 直接把 cuda file 編譯成 executable 的過程一樣，也有調用到 <code>clang++ -cc1</code>。這邊編譯遇到的問題是 <strong>undeclared identifier</strong>，這個感覺比較麻煩，因為明明有下<code>-fcuda-include-gpubinary device.fatbin</code> 這條，所以照理說會連結到已經編好的 <strong>cuda fatbinary</strong> 才對，這部分還要再研究一下。</p>
+<pre tabindex="0"><code class="language-haskell=" data-lang="haskell=">um.cu:46:8: error: use of undeclared identifier cudaConfigureCall
+  Myadd&lt;&lt;&lt;numBlocks, blockSize&gt;&gt;&gt;(N, x, y);
+       ^
+1 error generated when compiling for host.
+CUA_Makefile:39: recipe for target &#39;host.bc&#39; failed
+</code></pre><p><a href="https://github.com/yuweitt/CUDAMemPass/blob/main/um/CUA_Makefile">My Makefile Link</a></p>
+<h2 id="makefile-from-stackoverflow-linkhttpsstackoverflowcomquestions67070926struggling-with-cuda-clang-and-llvm-ir-and-getting-cuda-failure-invalid-dev">Makefile from Stackoverflow <a href="https://stackoverflow.com/questions/67070926/struggling-with-cuda-clang-and-llvm-ir-and-getting-cuda-failure-invalid-dev">Link</a></h2>
+<p>這個 Makefile 是從 Stackoverflow 上面來的，該作者用的是 Power PC ??，但反正應該改成 x86_64 就可以了，只是不知道為什麼還是不能跑。</p>
+<p>這邊最後 link 部分是直接調用 NVIDIA 的 <code>nvcc</code>，反正無腦給他跑應該就會自己去啟動 driver，就沒有用到上面的 <code>clang++ -cc1</code>，不過現在問題就是遇到這個 error，找不到<code>-lc++</code>，我上網查也找不到太到<code>-lc++</code>這個 flag，可以想見它就是要 load c++ library，但是這樣下 flag 真的是對的嗎? 作者是說他可以跑，我再試試看。</p>
+<pre tabindex="0"><code class="language-haskell=" data-lang="haskell=">nvcc um.o um_dlink.o -o um -arch=sm_61 -lc++
+/usr/bin/ld: cannot find -lc++
+collect2: error: ld returned 1 exit status
+</code></pre><p>如果把那個 flag 拿掉會變這樣，GG</p>
+<pre tabindex="0"><code class="language-haskell=" data-lang="haskell=">nvcc um.o um_dlink.o -o um -arch=sm_61
+/usr/bin/ld: um.o: relocation R_X86_64_32 against symbol `_Z5MyaddiPfS_&#39; can not be used when making a PIE object; recompile with -fPIC
+/usr/bin/ld: final link failed: Nonrepresentable section on output
+collect2: error: ld returned 1 exit status
+</code></pre><p><a href="https://github.com/yuweitt/CUDAMemPass/blob/main/um/Makefile">My github Makefile link</a></p>
+<h3 id="cuda-路徑">CUDA 路徑</h3>
+<ul>
+<li>LD_LIBRARY_PATH
+<code>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local</code></li>
+<li>CUDA_HOME
+<code>export CUDA_HOME=/usr/local/cuda</code>
+<code>export PATH=$PATH:/usr/local/cuda/bin</code></li>
+</ul>
+<h2 id="cuda-編譯學習">CUDA 編譯學習</h2>
+<ul>
+<li>
+<p>clang++ -c
+The <code>-c</code> flag is used to tell the compiler you don&rsquo;t want to build a program (link together into an executable), just compile this particular file into an object file - typically producing a file called something.o or something.obj</p>
+</li>
+<li>
+<p>-E
+Stop after the preprocessing stage; do not run the compiler proper. The output is in the form of preprocessed source code, which is sent to the standard output.</p>
+</li>
+<li>
+<p>Stpes</p>
+</li>
+</ul>
+<pre tabindex="0"><code class="language-bash=" data-lang="bash="># This generate um-cuda-nvptx64-nvidia-cuda-sm_61.s and um.s
+$ clang++ -S um.cu --cuda-gpu-arch=sm_61 -L /usr/local/cuda/lib64/ -lcudart_static -ldl -lrt -pthread
+# This generate cuda device object file
+$ ptxas -m64 -O0 --gpu-name sm_61 --output-file um-cuda.o um-cuda-nvptx64-nvidia-cuda-sm_61.s
+# This generate cuda fatbinary
+$ fatbinary -64 --create um-cuda.fatbin --image=profile=sm_61,file=um-cuda.o --image=profile=compute_61,file=um-cuda-nvptx64-nvidia-cuda-sm_61.s
+$ llc &lt; new.ll &gt; new.s
+</code></pre><p><a href="https://i.imgur.com/zB3ybQb.png">CUDA 的 Comiple Flow</a></p>
+<p>這個是 NVIDIA 的官方文件，講述 NVVM 還有 LLVM IR 的東西。</p>
+<ul>
+<li>NVVM IR 和 LLVM IR
+Technically speaking, NVVM IR is LLVM IR with a set of rules, restrictions, and conventions, plus a set of supported intrinsic functions. A program specified in NVVM IR is always a legal LLVM program. A <strong>legal LLVM program may not be a legal NVVM program.</strong></li>
+</ul>
+<h3 id="command">Command</h3>
+<p><code>clang++ um.cu -o um --cuda-gpu-arch=sm_61 -L /usr/local/cuda/lib64/ -lcudart_static -ldl -lrt -pthread</code></p>
+<p><code>clang++ --cuda-gpu-arch=sm_61 -L /usr/local/cuda/lib64/ -lcudart_static -ldl -lcuda -lrt -pthread -lcudart  um.o um-cuda.ptx.o -o um</code>
+會有這個 error，加入 <code>-lcudart</code> 就可以解決沒有 reference 的問題，但是 incompatible 還是沒有辦法解決。</p>
+<hr>
+<h1 id="how-to-write-a-llvm-pass">How to write a LLVM Pass</h1>
+<p>Example pass &ldquo;Hello.cpp&rdquo; under <code>~/llvm-project/llvm/lib/Transformation/</code>.
+The correspond <code>.so</code> file will be genereated under <code>~/llvm-project/build/lib/</code> after rebuild.</p>
+<pre tabindex="0"><code>$clang `llvm-config --cxxflags` -Wl,-znodelete \
+-fno-rtti -fPIC -shared cuda_mem.cpp \
+-o CUDAMem.so `llvm-config --ldflags` 
+</code></pre><ul>
+<li>Run my LLVM pass
+<code>$ opt -load lib/CUDAMemPass.so -cudamem &lt; ~/cuda/um/um.ll &gt; /dev/null</code></li>
+</ul>
+<h2 id="understanding-dynamaphttpsgithubcomlineagechdynamapblobmasterdynamap-llvmmem_acc_instcpp">Understanding <a href="https://github.com/lineagech/DynaMap/blob/master/DynaMap-LLVM/mem_acc_inst.cpp">DynaMap</a></h2>
+<p>這邊先來看一下 Module, Function, Basic Block 的關係
+<img src="https://i.imgur.com/YkDUYap.png" alt=""></p>
+<ul>
+<li>LLVMContext
+Important class for using LLVM in a <strong>threaded context</strong>
+Manage core &ldquo;global&rdquo; data of <strong>LLVM&rsquo;s core infrastructure</strong>, including the <strong>type and constant uniquing tables</strong></li>
+</ul>
+<h2 id="peek-into-umll">Peek into um.ll</h2>
+<p><img src="https://i.imgur.com/Pmyt9NC.png" alt=""></p>
+<p>We see <code>cudaMallocManaged</code></p>
+<h3 id="moduleh">Module.h</h3>
+<pre tabindex="0"><code class="language-cpp=" data-lang="cpp=">iterator begin() { return FunctionList.begin(); }
+named_metadata_iterator named_metadata_begin() { return NamedMDList.begin(); }
+</code></pre><h3 id="get-mdnode-from-module">Get MDnode from module</h3>
+<pre tabindex="0"><code class="language-cpp=" data-lang="cpp=">for (auto named_meta = module-&gt;named_metadata_begin(); 
+         named_meta != module-&gt;named_metadata_end(); 
+         named_meta++)
+        for (auto op = named_meta-&gt;op_begin();
+            op != named_meta-&gt;op_end(); op++)
+// This is not working
+</code></pre><h3 id="namedmdlisttype-ilistnamedmdnode">NamedMDListType (<code>ilist&lt;NamedMDNode&gt;</code>)</h3>
+<p>Define in <code>llvm/Module.h</code>
+<code>ilist&lt;T&gt;</code>是LLVM中自定義的其中一種 Container，其實就和 STL 的 List 很像，但是做了一些改變以符合 LLVM 內部需求。詳細請見 <a href="https://llvm.org/docs/ProgrammersManual.html?highlight=ilist#llvm-adt-ilist-h">User Manual</a>
+所以總的來說，他就是一個 List 裡面存一堆 <strong>NamedMDNode</strong></p>
+<h3 id="namedmdnode">NamedMDNode</h3>
+<p>A <strong>tuple of MDNodes.</strong>
+Despite its name, a NamedMDNode isn&rsquo;t itself an MDNode.
+<strong>It is illegal for a NamedMDNode to appear as an operand of an MDNode.</strong>
+這邊暫時不太懂他在幹嘛
+:::info
+A NamedMDNode looks like this:
+!named = !{!0, !1}
+An MDNode looks like this:
+!0 = !{!1, i32 0, i32* @global}
+:::</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>NamedMDNode <span style="color:#f92672">*</span>node <span style="color:#f92672">=</span> module<span style="color:#f92672">-&gt;</span>getNamedMetadata(MetaName);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 大部分的操作好像都長這樣，可是我要怎麼拿到 MDNode呢
+</span></span></span></code></pre></div><h3 id="mdnode">MDNode</h3>
+<p>Metadata nodes can be uniqued, like <strong>constants, or distinct.</strong> Temporary metadata nodes (with full support for RAUW) can be used to delay uniquing until forward references are known. The basic metadata node is an MDTuple.
+要怎麼使用 MDNode 呢，請看 <a href="https://vimsky.com/examples/detail/cpp-ex---MDNode---class.html">MDNode</a></p>
+<pre tabindex="0"><code class="language-cpp=" data-lang="cpp=">MDNode *getLoopID() const;
+// Return the llvm.loop loop id metadata node for this loop if it is present.
+</code></pre><h3 id="metadata">Metadata</h3>
+<p>Root of the metadata hierarchy.
+This is a root class for typeless data in the IR.
+<del>也許我們把 Metadata 搞懂，就可以知道這一系列在幹嘛</del>
+Here comes the explaination -&gt; <a href="https://llvm.org/docs/LangRef.html#metadata">link</a>
+:::info</p>
+<ul>
+<li>One example application of metadata is <strong>source-level</strong> debug information.</li>
+</ul>
+<pre tabindex="0"><code class="language-cpp=" data-lang="cpp=">class Metadata {
+    //這三個不知道在幹嘛
+    enum StorageType { Uniqued, Distinct, Temporary };
+    unsigned char Storage : 7;
+    unsigned char SubclassData1 : 1;
+    unsigned short SubclassData16 = 0;
+    unsigned SubclassData32 = 0;
+</code></pre><p><img src="https://i.imgur.com/K9TFAdW.png" alt=""></p>
+<h3 id="irbuilder">IRBuilder</h3>
+<p>Literally, build LLVM IR.</p>
+<h3 id="problem">Problem</h3>
+<p>好像要先人工分析一些 IR 的資訊，才知道 Pass 要怎麼寫，所以可能要先看懂一些 Label (Function 的)，這樣才知道 Pass 要寫啥。</p>
+<p>什麼時候用 Metadata，Functin Name???</p>
+<p>Naming convention ???</p>
+<hr>
+<hr>
+<h1 id="compile-cuda-with-clang">Compile Cuda with clang</h1>
+<h2 id="generate-bc-and-opt-pass">Generate bc and opt pass</h2>
+<p><code>clang -emit-llvm um.cu -c -o hello.bc</code></p>
+<p><strong>Command</strong>
+<code>clang++ um.cu -o um --cuda-gpu-arch=sm_61 -L /usr/local/cuda/lib64/ -lcudart_static -ldl -lrt -pthread -save-temps</code></p>
+<ul>
+<li>cudart : cuda run time</li>
+<li>dl : This is the interface to the dynamic loader, which provides a client program with ability to do things such as explicitly load other libraries, lookup symbols within, etc.</li>
+</ul>
+<p><code>cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS=clang -G &quot;Unix Makefiles&quot; ../llvm </code></p>
+<h3 id="how-to-specify-compute-capability">How to specify compute capability</h3>
+<p><img src="https://i.imgur.com/5Hyfuii.png" alt=""></p>
+<h3 id="what-is-cui-file-">What is cui file ???</h3>
+<p><img src="https://i.imgur.com/YrS2PJ3.png" alt=""></p>
+<p>with cuda docker and clang-12</p>
+<pre tabindex="0"><code>&lt;built-in&gt;:1:10: fatal error: &#39;__clang_cuda_runtime_wrapper.h&#39; file not found
+#include &#34;__clang_cuda_runtime_wrapper.h&#34;
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated when compiling for sm_62.
+</code></pre><p>Bad, docker seems to be the root of devil.</p>
+<p><a href="http://wujingyue.github.io/docs/gpucc-tutorial.pdf">gpucc: An Open-Source GPGPU Compiler</a></p>
+<p><a href="https://developer.nvidia.com/cuda-gpus">GPU Compute Capability</a></p>
+<ul>
+<li>llc : The llc command compiles LLVM source inputs into assembly language for a specified architecture.</li>
+<li>-g flag : Generate complete debug info.</li>
+</ul>
+<hr>
+<hr>
+<h2 id="manipualte-cuda-um-advanced-advice">Manipualte CUDA UM Advanced Advice</h2>
+<pre tabindex="0"><code class="language-cpp=" data-lang="cpp=">__host__ ​cudaError_t cudaMemAdvise \
+    ( const void* devPtr, size_t count,\
+    cudaMemoryAdvise advice, int  device )
+</code></pre><p>所以會用到的值應該是 1、3、5 這三個。
+<a href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__MEMORY.html#group__CUDART__MEMORY_1ge37112fc1ac88d0f6bab7a945e48760a">NVIDIA Reference</a></p>
+<ul>
+<li>Default</li>
+<li>cudaMemAdviseSetReadMostly</li>
+<li>cudaMemAdviseSetPreferredLocation</li>
+<li>cudaMemAdviseSetAccessedBy
+<img src="https://i.imgur.com/7AV8oyC.png" alt=""></li>
+</ul>
+<p><code>cudaMemAdvise(a, Size∗Size∗sizeof(float), cudaMemAdviseSetReadMostly, 0)</code></p>
+<h3 id="in-llvm-ir">In LLVM IR</h3>
+<p>Compile 出來會變成</p>
+<pre tabindex="0"><code class="language-haskell=" data-lang="haskell=">declare dso_local i32 @cudaMemAdvise(i8*, i64, i32, i32) #1
+
+// 這個我有
+%156 = load %struct.XYZ*, %struct.XYZ** %26, align 8
+%157 = bitcast %struct.XYZ* %156 to i8*
+//
+%158 = load i32, i32* %19, align 4
+%159 = sext i32 %158 to i64
+%160 = invoke i32 @cudaMemAdvise(i8* %157, i64 %159, i32 1, i32 0)
+      to label %161 unwind label %137
+</code></pre><p>我插的，但是不能跑，會有 cuda error</p>
+<pre tabindex="0"><code class="language-haskell=" data-lang="haskell=">declare dso_local i32 @cudaMemAdvise(i8*, i64, i32, i32)
+
+%72 = load %struct.XYZ*, %struct.XYZ** %26, align 8
+%73 = bitcast %struct.XYZ* %72 to i8*
+
+%74 = call i32 @cudaMemAdvise(i8* %73, i64 4096, i32 0, i32 0)
+</code></pre><p>Distance = 5</p>
+<pre tabindex="0"><code class="language-haskell=" data-lang="haskell=">265:                                              ; preds = %261
+    %266 = getelementptr inbounds %struct.Params, %struct.Params* %11, i32 0, i32 1
+    %267 = load i32, i32* %266, align 4
+    %268 = getelementptr inbounds %struct.Params, %struct.Params* %11, i32 0, i32 1
+    %269 = load i32, i32* %268, align 4
+    %270 = mul nsw i32 %267, %269
+    %271 = load i32, i32* %35, align 4
+    %272 = icmp sle i32 %270, %271
+    br i1 %272, label %273, label %278
+
+273:                                              ; preds = %265
+    %274 = load %struct.XYZ*, %struct.XYZ** %26, align 8
+    %275 = bitcast %struct.XYZ* %274 to i8*
+    %276 = call i32 @cudaMemPrefetchAsync(i8* %275, i64 512, i32 0, %struct.CUstream_st* null)
+    %277 = call i32 @cudaMemAdvise(i8* %275, i64 512, i32 0, i32 0)
+    br label %278
+</code></pre><hr>
+<h2 id="manipulate-cuda-prefetch">Manipulate CUDA Prefetch</h2>
+<p><a href="https://faculty.sist.shanghaitech.edu.cn/faculty/songfu/course/spring2018/CS131/llvm.pdf">LLVM Manual Book</a></p>
+<p>因為我要放進去一個 Null Pointer，首先我先想辦法抓到 Struct 的 Type
+結果我發現 LLVM 有很多 Type
+<img src="https://i.imgur.com/rpEyRxA.png" alt=""></p>
+<p>這邊可以看到，StructType 就是其中之一，而其中就有 static function 可以根據你的 struct Name 拿到相對應的 Struct Type。</p>
+<p>這邊要注意的一點，就是我用的是 LLVM 10.0，而現在最新版的 Docutment 已經到 LLVM 14.0，最新版的 API 長這樣，基本上很易用，你只要把 Struct 的字串跟 Context 一起丟進去就可以了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> StructType <span style="color:#f92672">*</span> StructType<span style="color:#f92672">::</span>getTypeByName (LLVMContext <span style="color:#f92672">&amp;</span>C, StringRef Name)
+</span></span></code></pre></div><p>但是 LLVM 10.0的不行，10.0 的長這樣，而且是定義在 Module 的 class 裡面</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>StructType<span style="color:#f92672">*</span> Module<span style="color:#f92672">::</span>getTypeByName (StringRef Name) <span style="color:#66d9ef">const</span>
+</span></span></code></pre></div><p>至於要找之前的 Document 的話，我是打 <strong>LLVM 10.0 Doxygen</strong>，然後去下載他的 Docs，連結大概會長<a href="https://prereleases.llvm.org/10.0.0/">這樣</a>，然後再去下載裡面的 <strong>llvm doxygen</strong>，解壓縮後就會有一堆 HTML 可以看。</p>
+<p>整體來說會長這樣</p>
+<pre tabindex="0"><code class="language-cpp=" data-lang="cpp=">StructType* CUstream_struct = module-&gt;getTypeByName(&#34;struct.CUstream_st&#34;);
+
+// Check not null
+if(CUstream_struct)
+    errs() &lt;&lt; &#34;\t CUstream struct : &#34; &lt;&lt; CUstream_struct-&gt;getStructName().str() &lt;&lt; &#34;\n&#34;;
+// Create null pointer
+Constant* CU_stream = ConstantStruct::getNullValue(CUstream_struct);
+</code></pre><p>但是目前他的 IR 出來不是 Null，而是 Zero Initializer，感覺有鬼，哭啊。</p>
+<p>有一個想法是，先轉成 PointerType，然後再用<code>Constant* ConstantPointerNull::get(PointerType)</code> 這個函數拿到 null struct Pointer。但是很顯然我用<code>dyn_cast</code>的時候就出事了，轉出來是 nullptr。具體來說是這樣，還在研究。</p>
+<pre tabindex="0"><code class="language-cpp=" data-lang="cpp=">StructType* CUstream_struct = module-&gt;getTypeByName(&#34;struct.CUstream_st&#34;);
+PointerType* CUstream_pointer = dyn_cast&lt;PointerType&gt;(CUstream_struct);
+
+// 這邊就不會 Print 東西出來了
+if(CUstream_pointer)
+  errs() &lt;&lt; &#34;\t CUstream pointer : &#34; &lt;&lt; CUstream_pointer-&gt;getElementType()-&gt;getStructName().str() &lt;&lt; &#34;\n&#34;;
+
+// Segmentation Fault
+ConstantPointerNull* CU_stream_null = ConstantPointerNull::get(CUstream_pointer);
+</code></pre><p>然後我上 StackOverflow 上面問，沒有人要裡我，哭啊
+結果後來發現其實很簡單，不用 Cast 過去，PointerType Class 本身就有 <code>static PointerType* get (Type *ElementType, unsigned AddressSpace)</code>，所以 OK 的。
+結論 - Nonintializer 的確不行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>StructType<span style="color:#f92672">*</span> CUstream_struct <span style="color:#f92672">=</span> module<span style="color:#f92672">-&gt;</span>getTypeByName(<span style="color:#e6db74">&#34;struct.CUstream_st&#34;</span>);
+</span></span><span style="display:flex;"><span>ConstantPointerNull<span style="color:#f92672">*</span> CU_stream_null <span style="color:#f92672">=</span>  ConstantPointerNull<span style="color:#f92672">::</span>get(PointerType<span style="color:#f92672">::</span>get(CUstream_struct, <span style="color:#ae81ff">0</span>));
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 直接 bitcast
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Value<span style="color:#f92672">*</span> ir_ptr <span style="color:#f92672">=</span> builder.CreateBitCast(val, Type<span style="color:#f92672">::</span>getInt8PtrTy(context));
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Generate cuda prefetch instruction
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>CallInst <span style="color:#f92672">*</span>MI <span style="color:#f92672">=</span> builder.CreateCall(cuda_prefetch_func, args);
+</span></span></code></pre></div><p>愛情你比我想的閣較偉大
+LLVM比我想的閣較複雜@@</p>
+<p>遇到的問題
+現在 opt 跑完 Pass ，但是 IR 沒有改變，不知道是不是 opt 的用法</p>
+<p>Instruction does not dominate all uses (用第一個 Instruction 的話)
+Basic Block in function &lsquo;main&rsquo; does not have terminator! (用 BasicBlock 的話)
+Instruction referencing instruction not embedded in a basic block! (用 Context 的話)</p>
+<h3 id="結論">結論</h3>
+<p>排除以上困難，已經可以插入了 Prefetch，用 <code>diff</code> 看兩個 .ll 檔案
+<img src="https://i.imgur.com/jRdzgQZ.png" alt="">
+跑的指令 :
+<code>opt -S -load lib/CUDAMemPass.so -cudamem ~/cuda/um/um.ll -o ~/cuda/um/new.ll </code></p>
+<hr>
+<p><a href="https://ieeexplore.ieee.org/document/9188060">Maybe relevent Paper</a></p>
+<p>現在遇到的一些困難是</p>
+<ol>
+<li>這些 register 要怎麼拿到 ?? 還是要自己 Create ??</li>
+<li><del>我的 Function Callee 要放什麼 ??</del></li>
+<li>我怎麼知道有哪些 address 是要 prefetch 的</li>
+<li>我想要知道之前 Prefetching 都是怎麼做的，利用Emulation ?? 還是 Cuda</li>
+<li>我在 Auto-tune 的時候，是不是應該加上一些 Heuristic，還是完全自動，會不會無法收斂</li>
+<li>GPU Page 有哪些東西可以改動，可是 Prefetch 是不是就會跟 Page Replacement 難以獨立</li>
+<li>如果是會互相影響，是不是 Focus 一個做就好 ??</li>
+<li>Granularity 要怎麼設會比較好??</li>
+<li>不同的 Optimization 之間，要一起做嗎???</li>
+</ol>
+<p>想法</p>
+<ul>
+<li>我可以知道 cudaMallocManage，那我應該就可以操控??</li>
+<li>我可以知道 Launch，那我也可以操控</li>
+</ul>
+<p>看了一下 DynaDrano 以及其他的方法，大部分都是會寫 cu 的 Code，然後利用 LLVM Pass 把 Instrument 插進去。</p>
+<p>這個是從 CUDA 的 PTX 官方 Manual 上面拿下來的</p>
+<p><a href="https://i.imgur.com/LdjqCSv.png">圖片太大了，有點礙眼，要看自己點進去</a></p>
+<p><a href="https://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__UNIFIED.html#group__CUDA__UNIFIED_1gfe94f8b7fb56291ebcea44261aa4cb84">CUDA Prefetch API</a></p>
+<h3 id="cudamemprefetchasync-in-llvm-ir">cudaMemPrefetchAsync in LLVM IR</h3>
+<p>我現在可以拿到 Prefetch 的 Declaration 了
+但是參數可能是一個問題</p>
+<p>目前可以做到這樣</p>
+<pre tabindex="0"><code class="language-cpp=" data-lang="cpp=">// %9 = alloca float*, align 8
+// %16 = bitcast float** %9 to i8**
+// %20 = load i8*, i8** %16, align 8, !tbaa !7
+// %21 = call i32 @cudaMemPrefetchAsync(i8* %20, i64 4096, i32 0, %struct.CUstream_st* null)
+IntegerType* int_type32 = IntegerType::get(context, 32);
+IntegerType* int_type64 = IntegerType::get(context, 64);
+ConstantInt* device_id = ConstantInt::get(int_type32, 0, false);
+ConstantInt* alloca_size = ConstantInt::get(int_type64, 4096, false);
+Value* args[] = {alloca_size, device_id};
+
+builder.CreateCall(cuda_prefetch_func, args);
+</code></pre><p>但是我要想辦法</p>
+<ol>
+<li>生出 x 的位置</li>
+<li>生出 struct.CUstream_st 的 null pointer</li>
+</ol>
+<p><a href="https://i.imgur.com/oahRnNA.png">圖片</a></p>
+<p><strong>What Next ???</strong></p>
+<p>先看每個 Instruction 可以幹嘛</p>
+<pre tabindex="0"><code class="language-cpp=" data-lang="cpp=">for (BasicBlock &amp;BB : F) {
+  for (Instruction &amp;inst : BB) {
+      if(inst.getOpcode() == Instruction::Call || inst.getOpcode() == Instruction::Invoke) {
+      // errs() &lt;&lt; &#34;\\n callinst =&gt; &#34; &lt;&lt; inst &lt;&lt; &#34;\\n&#34;;
+      // Instruction* I = &amp;(inst);
+      // errs() &lt;&lt; &#34;\\n callinst =&gt; &#34; &lt;&lt; inst.getOpcodeName() &lt;&lt; &#34;\\n&#34;;
+      if (isa&lt;CallInst&gt;(&amp;inst)) {
+        Function *func = cast&lt;CallInst&gt;(&amp;inst)-&gt;getCalledFunction();
+        val = cast&lt;CallInst&gt;(&amp;inst)-&gt;getArgOperand(0);
+        if(func) {
+          StringRef fname = func-&gt;getName();
+          if(fname == &#34;cudaMallocManaged&#34;) {
+            errs() &lt;&lt; &#34;\\t Function Name : &#34; &lt;&lt; fname &lt;&lt; &#34;\\n&#34;;
+            errs() &lt;&lt; &#34;\\n callinst =&gt; &#34; &lt;&lt; inst &lt;&lt; &#34;\\n&#34;;
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre><h3 id="什麼是-llvm-instrinsic-">什麼是 LLVM Instrinsic ???</h3>
+<p>Intrinsic函數是編譯器內建的函數，由編譯器提供，類似於內聯函數。但與內聯函數不同的是，因為Intrinsic函數是編譯器提供，而編譯器與硬件架構聯繫緊密，因此編譯器知道如何利用硬件能力以最優的方式實現這些功能</p>
+<h3 id="研究一下其他人的-call-都做了哪些事情-tutorialhttpsgithubcombanach-spacellvm-tutor">研究一下其他人的 Call 都做了哪些事情 <a href="https://github.com/banach-space/llvm-tutor">Tutorial</a></h3>
+<p>好像應該先 Initialize Load</p>
+<pre tabindex="0"><code class="language-cpp=" data-lang="cpp=">LoadInst *Load2 = Builder.CreateLoad(IntegerType::getInt32Ty(CTX), Var);
+Value *Inc2 = Builder.CreateAdd(Builder.getInt32(1), Load2);
+Builder.CreateStore(Inc2, Var);
+</code></pre><h2 id="別人的研究呢-">別人的研究呢 ??</h2>
+<p>XPlacer 用的是 Rose Source to source 的方式改動，但以 Instrumentation 來說，我覺得根本就是差不多的東西。</p>
+<p>In contrast to CudaAdvisor, XPlacer instruments source code. On one side, <strong>instrumented binary code typically runs faster</strong> because the instrumentation can be added to an optimized binary, whereas source-level construmentation often poses an obstacle to compile-time code optimization.
+On the other side, <strong>instrumenting source code offers better portability across CUDA versions</strong> and is easier to understand for programmers not familiar with low-level details. XPlacer’s function level instrumentation can be more easily customized through pragmas</p>
+<h3 id="llvm-loop-prefetch">LLVM Loop Prefetch</h3>
+<p>Scalar Evolution（SCEV）是編譯器中對於變量進行分析的一個非常有用並且強大的 Library，當然通常情況下只是對於Loop 中 int類型的變量進行分析。本文主要是介紹Scalar Evolution在LLVM中的使用。</p>
+<p>SCEV是LLVM中一個很重要的analysis pass。所謂的analysis pass就是這個pass只是做分析工作，並不會修改 IR Code。很多重要的優化 pass 都有使用SCEV的結果，比如說循環變量簡化（IndVars）， Loop Strength Reduce(LSR)，（Vectorizer）。 <a href="https://zhuanlan.zhihu.com/p/59539229">Ref</a></p>
+<hr>
+      </div>
+      <footer>
+        <div class="stats">
+  
+    <ul class="categories">
+      
+        
+          <li><a class="article-terms-link" href="/categories/life/">Life</a></li>
+        
+      
+    </ul>
+  
+  
+    <ul class="tags">
+      
+        
+          <li><a class="article-terms-link" href="/tags/life/">Life</a></li>
+        
+      
+    </ul>
+  
+</div>
+
+      </footer>
+    </div>
+    
+  </article>
+  <div class="pagination">
+    
+    
+      <a href="/blog/conver/" class="button right"><span>攝影。初</span></a>
+    
+  </div>
+
+      </main>
+      <section id="site-sidebar">
+  
+    <section id="recent-posts">
+      <header>
+        <h1>Recent Posts</h1>
+      </header>
+      
+      <article class="mini-post">
+          <a href="/blog/llvm/" class="image" style="--bg-image: url('https://yuweitt.github.io/img/Marvell/night.jpg');">
+    <img class="" src="https://yuweitt.github.io/img/Marvell/night.jpg" alt="">
+  </a>
+        <header>
+          <h2><a href="/blog/llvm/">LLVM 雜記</a></h2>
+          <time class="published" datetime="2022-05-08 00:00:00 &#43;0000 UTC">May 8, 2022</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+          <a href="/blog/conver/" class="image" style="--bg-image: url('https://i.imgur.com/O38wjuu.jpg');">
+    <img src="https://i.imgur.com/O38wjuu.jpg" alt="">
+  </a>
+        <header>
+          <h2><a href="/blog/conver/">攝影。初</a></h2>
+          <time class="published" datetime="2021-07-08 00:00:00 &#43;0000 UTC">July 8, 2021</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+          <a href="/blog/strange/" class="image" style="--bg-image: url('https://i.imgur.com/KzqB7q4.jpg');">
+    <img class="" src="https://i.imgur.com/KzqB7q4.jpg" alt="">
+  </a>
+        <header>
+          <h2><a href="/blog/strange/">哈爾濱驚魂記</a></h2>
+          <time class="published" datetime="2021-07-02 00:00:00 &#43;0000 UTC">July 2, 2021</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+          <a href="/blog/harbin_1/" class="image" style="--bg-image: url('https://i.imgur.com/PbPAXHL.jpg');">
+    <img class="" src="https://i.imgur.com/PbPAXHL.jpg" alt="Desert Scene">
+  </a>
+        <header>
+          <h2><a href="/blog/harbin_1/">哈爾濱 (一)</a></h2>
+          <time class="published" datetime="2018-10-05 00:00:00 &#43;0000 UTC">October 5, 2018</time>
+        </header>
+      </article>
+      
+      
+    </section>
+  
+
+  
+    
+
+      <section id="categories">
+        <header>
+          <h1><a href="/categories">Categories</a></h1>
+        </header>
+        <ul>
+          
+          
+          <li>
+              <a href="/categories/travel/">travel<span class="count">2</span></a>
+          
+          <li>
+              <a href="/categories/life/">life<span class="count">1</span></a>
+          
+          <li>
+              <a href="/categories/photography/">photography<span class="count">1</span></a>
+          
+          </li>
+        </ul>
+      </section>
+    
+  
+
+  
+    <section id="mini-bio">
+      <header>
+        <h1>About</h1>
+      </header>
+      <p>#攝影 #探索 #足跡</p>
+      <footer>
+        <a href="/about" class="button">Learn More</a>
+      </footer>
+    </section>
+  
+</section>
+
+      <footer id="site-footer">
+  
+      <ul class="socnet-icons">
+        
+
+        <li><a href="//github.com/yuweitt" target="_blank" rel="noopener" title="GitHub" class="fab fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//facebook.com/zhu.y.wei/" target="_blank" rel="noopener" title="Facebook" class="fab fa-facebook"></a></li>
+
+
+
+
+
+
+
+
+<li><a href="//instagram.com/yuwei_tt_photo" target="_blank" rel="noopener" title="Instagram" class="fab fa-instagram"></a></li>
+
+<li><a href="//twitter.com/yuwei_tt" target="_blank" rel="noopener" title="Twitter" class="fab fa-twitter"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="mailto:unimaybe4@gmail.com" target="_blank" title="Email" class="far fa-envelope"></a></li>
+
+      </ul>
+  
+  <p class="copyright">
+    © 2022 厭世陣線1997
+      <br>
+    Theme: <a href='https://github.com/pacollins/hugo-future-imperfect-slim' target='_blank' rel='noopener'>Hugo Future Imperfect Slim</a><br>A <a href='https://html5up.net/future-imperfect' target='_blank' rel='noopener'>HTML5 UP port</a> | Powered by <a href='https://gohugo.io/' title='0.97.3' target='_blank' rel='noopener'>Hugo</a>
+  </p>
+</footer>
+<a id="back-to-top" href="#" class="fas fa-arrow-up fa-2x"></a>
+
+      <script src="/js/highlight.js"></script>
+    
+    <script>hljs.highlightAll();</script><script src="/js/bundle.min.8dae46be8bb659f0067843cb1ac934ade028eafe1779e14ecace09902e21f6c6.js" integrity="sha256-ja5Gvou2WfAGeEPLGsk0reAo6v4XeeFOys4JkC4h9sY="></script>
+    <script src="/js/add-on.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J10FYDQ9V0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-J10FYDQ9V0');
+</script>
+    </div>
+  </body>
+</html>
